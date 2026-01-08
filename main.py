@@ -8,7 +8,9 @@ import pytz
 class SharedState:
     def __init__(self):
         self.lgrrx_nav = 73.81
+        self.lgrrx_updated = None
         self.sp500_nav = 65.93
+        self.sp500_updated = None
 
 @st.cache_resource
 def get_shared_state():
@@ -162,6 +164,8 @@ with tab1:
     # User input for baseline NAV
     def update_lgrrx_nav():
         state.lgrrx_nav = st.session_state.lgrrx_nav_input
+        cst = pytz.timezone('America/Chicago')
+        state.lgrrx_updated = datetime.now(cst).strftime("%b %d %I:%M %p")
 
     lgrrx_baseline_nav = st.number_input(
         "📌 Enter Last Official NAV", 
@@ -195,7 +199,12 @@ with tab1:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric("Last Official NAV", f"${lgrrx_baseline_nav:.2f}")
+        st.metric(
+            "Last Official NAV", 
+            f"${lgrrx_baseline_nav:.2f}",
+            delta=f"Set: {state.lgrrx_updated}" if state.lgrrx_updated else None,
+            delta_color="off"
+        )
     
     with col2:
         st.metric("Estimated NAV Now", f"${lgrrx_estimated_nav:.2f}", 
@@ -221,6 +230,8 @@ with tab2:
     # User input for baseline NAV
     def update_sp500_nav():
         state.sp500_nav = st.session_state.sp500_nav_input
+        cst = pytz.timezone('America/Chicago')
+        state.sp500_updated = datetime.now(cst).strftime("%b %d %I:%M %p")
 
     sp500_baseline_nav = st.number_input(
         "📌 Enter Last Official NAV", 
@@ -254,7 +265,12 @@ with tab2:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric("Last Official NAV", f"${sp500_baseline_nav:.2f}")
+        st.metric(
+            "Last Official NAV", 
+            f"${sp500_baseline_nav:.2f}",
+            delta=f"Set: {state.sp500_updated}" if state.sp500_updated else None,
+            delta_color="off"
+        )
     
     with col2:
         st.metric("Estimated NAV Now", f"${sp500_estimated_nav:.2f}", 
