@@ -4,6 +4,18 @@ import yfinance as yf
 from datetime import datetime
 import pytz
 
+# Shared state for NAV inputs
+class SharedState:
+    def __init__(self):
+        self.lgrrx_nav = 73.81
+        self.sp500_nav = 65.93
+
+@st.cache_resource
+def get_shared_state():
+    return SharedState()
+
+state = get_shared_state()
+
 st.set_page_config(page_title="Fund Nowcast", layout="wide")
 
 # LGRRX Top 10 Holdings
@@ -148,7 +160,17 @@ with tab1:
     st.caption("Class D")
     
     # User input for baseline NAV
-    lgrrx_baseline_nav = st.number_input("📌 Enter Last Official NAV", value=73.81, format="%.2f", help="Enter the most recent fund NAV (updates around 11 PM CST)", key="lgrrx_nav")
+    def update_lgrrx_nav():
+        state.lgrrx_nav = st.session_state.lgrrx_nav_input
+
+    lgrrx_baseline_nav = st.number_input(
+        "📌 Enter Last Official NAV", 
+        value=state.lgrrx_nav, 
+        format="%.2f", 
+        help="Enter the most recent fund NAV (updates around 11 PM CST)", 
+        key="lgrrx_nav_input",
+        on_change=update_lgrrx_nav
+    )
     
     # Refresh button
     if st.button("🔄 Refresh", use_container_width=True, key="lgrrx_refresh"):
@@ -197,7 +219,17 @@ with tab2:
     st.caption("U.S. Equity | Large Blend | 507 holdings")
     
     # User input for baseline NAV
-    sp500_baseline_nav = st.number_input("📌 Enter Last Official NAV", value=65.93, format="%.2f", help="Enter the most recent fund NAV (updates around 11 PM CST)", key="sp500_nav")
+    def update_sp500_nav():
+        state.sp500_nav = st.session_state.sp500_nav_input
+
+    sp500_baseline_nav = st.number_input(
+        "📌 Enter Last Official NAV", 
+        value=state.sp500_nav, 
+        format="%.2f", 
+        help="Enter the most recent fund NAV (updates around 11 PM CST)", 
+        key="sp500_nav_input",
+        on_change=update_sp500_nav
+    )
     
     # Refresh button
     if st.button("🔄 Refresh", use_container_width=True, key="sp500_refresh"):
