@@ -18,6 +18,12 @@ def get_shared_state():
 
 state = get_shared_state()
 
+# Ensure backward compatibility for existing running instances
+if not hasattr(state, 'lgrrx_updated'):
+    state.lgrrx_updated = None
+if not hasattr(state, 'sp500_updated'):
+    state.sp500_updated = None
+
 st.set_page_config(page_title="Fund Nowcast", layout="wide")
 
 # LGRRX Top 10 Holdings
