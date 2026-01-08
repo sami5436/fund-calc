@@ -165,6 +165,7 @@ with tab1:
     cst = pytz.timezone('America/Chicago')
     now_cst = datetime.now(cst)
     time_str = now_cst.strftime("%I:%M:%S %p CST")
+    date_str = now_cst.strftime("%b %d, %Y")
     
     # Display metrics
     st.subheader("Fund Estimate")
@@ -179,7 +180,7 @@ with tab1:
                  delta=f"{lgrrx_fund_change:+.2f}%")
     
     with col3:
-        st.metric("Updated", time_str)
+        st.metric("Updated", time_str, delta=date_str, delta_color="off")
     
     st.divider()
     
@@ -213,6 +214,7 @@ with tab2:
     cst = pytz.timezone('America/Chicago')
     now_cst = datetime.now(cst)
     time_str = now_cst.strftime("%I:%M:%S %p CST")
+    date_str = now_cst.strftime("%b %d, %Y")
     
     # Display metrics
     st.subheader("Fund Estimate")
@@ -227,7 +229,7 @@ with tab2:
                  delta=f"{sp500_fund_change:+.2f}%")
     
     with col3:
-        st.metric("Updated", time_str)
+        st.metric("Updated", time_str, delta=date_str, delta_color="off")
     
     st.divider()
     
