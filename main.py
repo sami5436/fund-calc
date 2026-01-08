@@ -121,7 +121,7 @@ def create_styled_df(holdings_data):
         if change > 0:
             color = 'background-color: #2ecc71; color: black'  # Green bg, black text
         elif change < 0:
-            color = 'background-color: #ff4b4b; color: black'  # Red bg, black text
+            color = 'background-color: #ff4b4b; color: white'  # Red bg, white text
         else:
             return styles
         
